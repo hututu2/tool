@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPv4查询</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        div,
+        th {
+            text-align: center ! important;
+            margin-top: 3%;
+        }
+        
+        #result {
+            margin-left: 25%;
+            margin-right: 25%;
+        }
+        
+        #inputbox {
+            margin: 50px;
+        }
+        
+        input {
+            padding: 6px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            height: 100%;
+        }
+        
+        button {
+            margin-left: 20px;
+        }
+        
+        hr {
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h2>IPv4查询</h2>
+        <div id="inputbox">
+            <input type="text" name="ip" id="ip">
+            <button id="getnumber" class="btn btn-primary" data-toggle="button">查询</button></div>
+        <div id="result">
+            <table class="table">
+                <thead>
+                    <th>查询IP</th>
+                    <th>所属地址</th>
+                    <th>IP范围</th>
+                    <th>耗时</th>
+                </thead>
+                <tbody id="result-list"></tbody>
+            </table>
+        </div>
+        <hr>
+    </div>
+</body>
+<script>
+    document.getElementById("getnumber").onclick = () => {
+        let ip = document.getElementById("ip").value;
+        let url = 'http://ip.zxinc.org/api.php?type=json&ip=' + ip;
+        let xhr = new XMLHttpRequest;
+        let sendtime = (new Date()).getTime();
+        console.log(sendtime);
+        xhr.onload = () => {
+            let text = JSON.parse(xhr.responseText);
+            let receivetime = (new Date()).getTime();
+            console.log(receivetime);
+
+            let responsetime = receivetime - sendtime;
+            let location = text.data.location;
+            let start = text.data.ip.start;
+            let end = text.data.ip.end;
+            let resultList = document.getElementById("result-list");
+            let newTr = document.createElement("tr");
+            newTr.innerHTML =
+                `<td>${ip}</td><td>${location}</td><td>${start}~${end}</td><td>${responsetime}ms</td>`;
+            resultList.appendChild(newTr);
+
+
+        }
+        xhr.open('post', url);
+        xhr.send();
+
+    }
+</script>
+
+</html>
