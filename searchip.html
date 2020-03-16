@@ -70,12 +70,9 @@
         let url = 'https://ip.zxinc.org/api.php?type=json&ip=' + ip;
         let xhr = new XMLHttpRequest;
         let sendtime = (new Date()).getTime();
-        console.log(sendtime);
         xhr.onload = () => {
             let text = JSON.parse(xhr.responseText);
             let receivetime = (new Date()).getTime();
-            console.log(receivetime);
-
             let responsetime = receivetime - sendtime;
             let location = text.data.location;
             let start = text.data.ip.start;
